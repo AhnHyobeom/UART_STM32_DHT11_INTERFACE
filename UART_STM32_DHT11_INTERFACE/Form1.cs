@@ -38,7 +38,7 @@ namespace UART_STM32_DHT11_INTERFACE
             conn = new MySqlConnection(connStr);
             conn.Open();
             cmd = new MySqlCommand("", conn);
-            // ListView 상단 설정
+            // History ListView 상단 설정
             listView1_DB.View = View.Details;
             listView1_DB.Columns.Add("시간");
             listView1_DB.Columns.Add("온도");
@@ -260,6 +260,144 @@ namespace UART_STM32_DHT11_INTERFACE
         private void button1_Clear_Click(object sender, EventArgs e)
         {
             textBox1_ReceiveData.Text = "";
+        }
+
+        private void Form1_ResizeEnd(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+
+        }
+        // 온도 검색
+        private void button1_TMPSearch_Click(object sender, EventArgs e)
+        {
+            int lowTMP = 0;
+            int highTMP = 0;
+            // SELECT s_date, s_temper, s_humi FROM sensor WHERE s_temper BETWEEN 23 AND 24;
+            sql = "SELECT s_date, s_temper, s_humi FROM sensor WHERE s_temper BETWEEN ";
+            lowTMP = int.Parse(textBox1_TMP_Search_LOW.Text);
+            highTMP = int.Parse(textBox2_TMP_Search_HIGH.Text);
+            sql += lowTMP + " AND ";
+            sql += highTMP;
+            searchListViewInit();
+            textBox1_TMP_Search_LOW.Text = "";
+            textBox2_TMP_Search_HIGH.Text = "";
+            DateTime nowDate = new DateTime();
+            nowDate = DateTime.Now;
+            label13_SearchName.Text = nowDate + " 온도 검색 " + lowTMP + " 이상 " + highTMP + " 이하";
+        }
+        // 습도 검색
+        private void button2_WETSearch_Click(object sender, EventArgs e)
+        {
+            int lowWET = 0;
+            int highWET = 0;
+            // SELECT s_date, s_temper, s_humi FROM sensor WHERE s_temper BETWEEN 23 AND 24;
+            sql = "SELECT s_date, s_temper, s_humi FROM sensor WHERE s_humi BETWEEN ";
+            lowWET = int.Parse(textBox4_WET_Search_LOW.Text);
+            highWET = int.Parse(textBox3_WET_Search_HIGH.Text);
+            sql += lowWET + " AND ";
+            sql += highWET;
+            searchListViewInit();
+            textBox4_WET_Search_LOW.Text = "";
+            textBox3_WET_Search_HIGH.Text = "";
+            DateTime nowDate = new DateTime();
+            nowDate = DateTime.Now;
+            label13_SearchName.Text = nowDate + " 습도 검색 " + lowWET + " 이상 " + highWET + " 이하";
+        }
+        private void searchListViewInit()
+        {
+            cmd.CommandText = sql;
+            reader = cmd.ExecuteReader();
+            // Seach ListView 상단 설정
+            listView1_Search.Clear();
+            listView1_Search.View = View.Details;
+            listView1_Search.Columns.Add("시간");
+            listView1_Search.Columns.Add("온도");
+            listView1_Search.Columns.Add("습도");
+            ListViewItem item;
+            int temper = 0;
+            int humi = 0;
+            DateTime date = new DateTime();
+            while (reader.Read())
+            {
+                date = (DateTime)reader["s_date"];
+                temper = (int)reader["s_temper"];
+                humi = (int)reader["s_humi"];
+                item = new ListViewItem(date.ToString());
+                item.SubItems.Add(temper.ToString());
+                item.SubItems.Add(humi.ToString());
+                listView1_Search.Items.Add(item);
+            }
+            // 폭 조절하기 (열 사이즈에 맞춤)
+            for (int i = 0; i < listView1_Search.Columns.Count; i++)
+            {
+                listView1_Search.Columns[i].TextAlign = HorizontalAlignment.Center;
+                listView1_Search.Columns[i].Width = -2;
+            }
+            reader.Close();
+        }
+        // 하한치 온도 검색
+        private void button1_TMPLOWSearch_Click(object sender, EventArgs e)
+        {
+            sql = "SELECT s_date, s_temper, s_humi FROM sensor WHERE s_temper <= ";
+            sql += MIN_TMP;
+            searchListViewInit();
+            DateTime nowDate = new DateTime();
+            nowDate = DateTime.Now;
+            label13_SearchName.Text = nowDate + " 하한치 온도 검색 ";
+        }
+        // 상한치 온도 검색
+        private void button1_TMPHIGHSearch_Click(object sender, EventArgs e)
+        {
+            sql = "SELECT s_date, s_temper, s_humi FROM sensor WHERE s_temper >=  ";
+            sql += MAX_TMP;
+            searchListViewInit();
+            DateTime nowDate = new DateTime();
+            nowDate = DateTime.Now;
+            label13_SearchName.Text = nowDate + " 상한치 온도 검색 ";
+        }
+        // 하한치 습도 검색
+        private void button2_WETLOWSearch_Click(object sender, EventArgs e)
+        {
+            sql = "SELECT s_date, s_temper, s_humi FROM sensor WHERE s_humi <= ";
+            sql += MIN_WET;
+            searchListViewInit();
+            DateTime nowDate = new DateTime();
+            nowDate = DateTime.Now;
+            label13_SearchName.Text = nowDate + " 하한치 습도 검색 ";
+        }
+        // 상한치 습도 검색
+        private void button1_WETHIGHSearch_Click(object sender, EventArgs e)
+        {
+            sql = "SELECT s_date, s_temper, s_humi FROM sensor WHERE s_humi >= ";
+            sql += MAX_WET;
+            searchListViewInit();
+            DateTime nowDate = new DateTime();
+            nowDate = DateTime.Now;
+            label13_SearchName.Text = nowDate + " 상한치 습도 검색 ";
+        }
+
+        private void tp_Exit_Click(object sender, EventArgs e)
+        {
+
+        }
+        // tap 선택마다 이벤트 발생
+        private void tap_Selected(object sender, TabControlEventArgs e)
+        {
+            // exit탭 클릭시
+            if (e.TabPageIndex == 4)
+            {
+                serialPort1.Close();
+                this.Close();
+            }
+        }
+
+        private void tap_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }

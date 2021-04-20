@@ -50,12 +50,10 @@ namespace UART_STM32_DHT11_INTERFACE
             textBox4_MAXWET.Text = MAX_WET.ToString();
             textBox3_MINWET.Text = MIN_WET.ToString();
         }
-
         private void label4_Click(object sender, EventArgs e)
         {
             
         }
-
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
@@ -102,7 +100,6 @@ namespace UART_STM32_DHT11_INTERFACE
             datain = serialPort1.ReadLine(); // newLine을 만날때까지 읽어 들인다. ReadExisting보다 안정적
             this.Invoke(new EventHandler(showData));
         }
-        
         private void showData(object sender, EventArgs e)
         {
             textBox1_ReceiveData.Text += datain;
@@ -133,7 +130,6 @@ namespace UART_STM32_DHT11_INTERFACE
                 s_humi = "";
             }
         }
-
         private void button2_ClosePort_Click(object sender, EventArgs e)
         {
             serialPort1.Close(); // 예외 처리 집어 넣을것
@@ -141,13 +137,14 @@ namespace UART_STM32_DHT11_INTERFACE
             label1_Comport.Text = "OFF";
             label1_Comport.ForeColor = Color.Red;
 
+            pictureBox1_warning.Visible = false;
+
             button1_Send.Enabled = false;
             button1_Clear.Enabled = false;
             textBox1_SendData.Enabled = false;
             button1_OpenPort.Enabled = true;
             button2_ClosePort.Enabled = false;
         }
-        
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (datain == "")
@@ -255,10 +252,14 @@ namespace UART_STM32_DHT11_INTERFACE
                 pictureBox1_warning.Visible = false;
             }
         }
-
         private void label11_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Clear_Click(object sender, EventArgs e)
+        {
+            textBox1_ReceiveData.Text = "";
         }
     }
 }

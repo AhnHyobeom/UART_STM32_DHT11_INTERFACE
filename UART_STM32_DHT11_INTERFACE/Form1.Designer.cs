@@ -30,11 +30,11 @@ namespace UART_STM32_DHT11_INTERFACE
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tap = new System.Windows.Forms.TabControl();
             this.tp_Setup = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -56,6 +56,15 @@ namespace UART_STM32_DHT11_INTERFACE
             this.comboBox2_Bps = new System.Windows.Forms.ComboBox();
             this.comboBox1_Port = new System.Windows.Forms.ComboBox();
             this.tp_Monitoring = new System.Windows.Forms.TabPage();
+            this.textBox3_MINWET = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.textBox4_MAXWET = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBox2_MINTMP = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.textBox1_MAXTMP = new System.Windows.Forms.TextBox();
+            this.pictureBox1_warning = new System.Windows.Forms.PictureBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox2_Wet = new System.Windows.Forms.TextBox();
@@ -63,32 +72,23 @@ namespace UART_STM32_DHT11_INTERFACE
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.tp_History = new System.Windows.Forms.TabPage();
+            this.label11 = new System.Windows.Forms.Label();
+            this.listView1_DB = new System.Windows.Forms.ListView();
             this.tp_Control = new System.Windows.Forms.TabPage();
             this.tp_Exit = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.pictureBox1_warning = new System.Windows.Forms.PictureBox();
-            this.textBox1_MAXTMP = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.textBox2_MINTMP = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.textBox3_MINWET = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.textBox4_MAXWET = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.listView1_DB = new System.Windows.Forms.ListView();
-            this.label11 = new System.Windows.Forms.Label();
             this.tap.SuspendLayout();
             this.tp_Setup.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox1_ReceiveData.SuspendLayout();
             this.gb_Comport.SuspendLayout();
             this.tp_Monitoring.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1_warning)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.tp_History.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1_warning)).BeginInit();
             this.SuspendLayout();
             // 
             // tap
@@ -163,6 +163,7 @@ namespace UART_STM32_DHT11_INTERFACE
             this.button1_Clear.TabIndex = 12;
             this.button1_Clear.Text = "Clear";
             this.button1_Clear.UseVisualStyleBackColor = true;
+            this.button1_Clear.Click += new System.EventHandler(this.button1_Clear_Click);
             // 
             // groupBox1_ReceiveData
             // 
@@ -316,24 +317,102 @@ namespace UART_STM32_DHT11_INTERFACE
             this.tp_Monitoring.Text = "Monitoring";
             this.tp_Monitoring.UseVisualStyleBackColor = true;
             // 
+            // textBox3_MINWET
+            // 
+            this.textBox3_MINWET.Location = new System.Drawing.Point(267, 466);
+            this.textBox3_MINWET.Name = "textBox3_MINWET";
+            this.textBox3_MINWET.Size = new System.Drawing.Size(78, 25);
+            this.textBox3_MINWET.TabIndex = 10;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label9.Location = new System.Drawing.Point(254, 436);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(116, 19);
+            this.label9.TabIndex = 11;
+            this.label9.Text = "습도 하한치";
+            // 
+            // textBox4_MAXWET
+            // 
+            this.textBox4_MAXWET.Location = new System.Drawing.Point(267, 392);
+            this.textBox4_MAXWET.Name = "textBox4_MAXWET";
+            this.textBox4_MAXWET.Size = new System.Drawing.Size(78, 25);
+            this.textBox4_MAXWET.TabIndex = 8;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label10.Location = new System.Drawing.Point(254, 362);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(116, 19);
+            this.label10.TabIndex = 9;
+            this.label10.Text = "습도 상한치";
+            // 
+            // textBox2_MINTMP
+            // 
+            this.textBox2_MINTMP.Location = new System.Drawing.Point(87, 466);
+            this.textBox2_MINTMP.Name = "textBox2_MINTMP";
+            this.textBox2_MINTMP.Size = new System.Drawing.Size(78, 25);
+            this.textBox2_MINTMP.TabIndex = 6;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label8.Location = new System.Drawing.Point(74, 436);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(116, 19);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "온도 하한치";
+            // 
+            // textBox1_MAXTMP
+            // 
+            this.textBox1_MAXTMP.Location = new System.Drawing.Point(87, 392);
+            this.textBox1_MAXTMP.Name = "textBox1_MAXTMP";
+            this.textBox1_MAXTMP.Size = new System.Drawing.Size(78, 25);
+            this.textBox1_MAXTMP.TabIndex = 4;
+            // 
+            // pictureBox1_warning
+            // 
+            this.pictureBox1_warning.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1_warning.Image")));
+            this.pictureBox1_warning.Location = new System.Drawing.Point(6, 213);
+            this.pictureBox1_warning.Name = "pictureBox1_warning";
+            this.pictureBox1_warning.Size = new System.Drawing.Size(416, 97);
+            this.pictureBox1_warning.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1_warning.TabIndex = 3;
+            this.pictureBox1_warning.TabStop = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label7.Location = new System.Drawing.Point(74, 362);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(116, 19);
+            this.label7.TabIndex = 5;
+            this.label7.Text = "온도 상한치";
+            // 
             // chart1
             // 
-            chartArea5.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.chart1.Legends.Add(legend5);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(416, 58);
             this.chart1.Name = "chart1";
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series9.Legend = "Legend1";
-            series9.Name = "온도";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.Legend = "Legend1";
-            series10.Name = "습도";
-            this.chart1.Series.Add(series9);
-            this.chart1.Series.Add(series10);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "온도";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "습도";
+            this.chart1.Series.Add(series1);
+            this.chart1.Series.Add(series2);
             this.chart1.Size = new System.Drawing.Size(531, 505);
             this.chart1.TabIndex = 1;
             this.chart1.Text = "chart1";
@@ -397,6 +476,26 @@ namespace UART_STM32_DHT11_INTERFACE
             this.tp_History.Text = "History";
             this.tp_History.UseVisualStyleBackColor = true;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("굴림", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label11.Location = new System.Drawing.Point(115, 51);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(753, 40);
+            this.label11.TabIndex = 12;
+            this.label11.Text = "온습도 DB 기록 (History + Real Time) ";
+            this.label11.Click += new System.EventHandler(this.label11_Click);
+            // 
+            // listView1_DB
+            // 
+            this.listView1_DB.HideSelection = false;
+            this.listView1_DB.Location = new System.Drawing.Point(120, 136);
+            this.listView1_DB.Name = "listView1_DB";
+            this.listView1_DB.Size = new System.Drawing.Size(746, 426);
+            this.listView1_DB.TabIndex = 3;
+            this.listView1_DB.UseCompatibleStateImageBehavior = false;
+            // 
             // tp_Control
             // 
             this.tp_Control.Location = new System.Drawing.Point(4, 25);
@@ -412,7 +511,7 @@ namespace UART_STM32_DHT11_INTERFACE
             this.tp_Exit.Location = new System.Drawing.Point(4, 25);
             this.tp_Exit.Name = "tp_Exit";
             this.tp_Exit.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_Exit.Size = new System.Drawing.Size(976, 624);
+            this.tp_Exit.Size = new System.Drawing.Size(979, 624);
             this.tp_Exit.TabIndex = 4;
             this.tp_Exit.Text = "Exit";
             this.tp_Exit.UseVisualStyleBackColor = true;
@@ -437,104 +536,6 @@ namespace UART_STM32_DHT11_INTERFACE
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // pictureBox1_warning
-            // 
-            this.pictureBox1_warning.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1_warning.Image")));
-            this.pictureBox1_warning.Location = new System.Drawing.Point(6, 213);
-            this.pictureBox1_warning.Name = "pictureBox1_warning";
-            this.pictureBox1_warning.Size = new System.Drawing.Size(416, 97);
-            this.pictureBox1_warning.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1_warning.TabIndex = 3;
-            this.pictureBox1_warning.TabStop = false;
-            // 
-            // textBox1_MAXTMP
-            // 
-            this.textBox1_MAXTMP.Location = new System.Drawing.Point(87, 392);
-            this.textBox1_MAXTMP.Name = "textBox1_MAXTMP";
-            this.textBox1_MAXTMP.Size = new System.Drawing.Size(78, 25);
-            this.textBox1_MAXTMP.TabIndex = 4;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label7.Location = new System.Drawing.Point(74, 362);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(116, 19);
-            this.label7.TabIndex = 5;
-            this.label7.Text = "온도 상한치";
-            // 
-            // textBox2_MINTMP
-            // 
-            this.textBox2_MINTMP.Location = new System.Drawing.Point(87, 466);
-            this.textBox2_MINTMP.Name = "textBox2_MINTMP";
-            this.textBox2_MINTMP.Size = new System.Drawing.Size(78, 25);
-            this.textBox2_MINTMP.TabIndex = 6;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label8.Location = new System.Drawing.Point(74, 436);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(116, 19);
-            this.label8.TabIndex = 7;
-            this.label8.Text = "온도 하한치";
-            // 
-            // textBox3_MINWET
-            // 
-            this.textBox3_MINWET.Location = new System.Drawing.Point(267, 466);
-            this.textBox3_MINWET.Name = "textBox3_MINWET";
-            this.textBox3_MINWET.Size = new System.Drawing.Size(78, 25);
-            this.textBox3_MINWET.TabIndex = 10;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label9.Location = new System.Drawing.Point(254, 436);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(116, 19);
-            this.label9.TabIndex = 11;
-            this.label9.Text = "습도 하한치";
-            // 
-            // textBox4_MAXWET
-            // 
-            this.textBox4_MAXWET.Location = new System.Drawing.Point(267, 392);
-            this.textBox4_MAXWET.Name = "textBox4_MAXWET";
-            this.textBox4_MAXWET.Size = new System.Drawing.Size(78, 25);
-            this.textBox4_MAXWET.TabIndex = 8;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label10.Location = new System.Drawing.Point(254, 362);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(116, 19);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "습도 상한치";
-            // 
-            // listView1_DB
-            // 
-            this.listView1_DB.HideSelection = false;
-            this.listView1_DB.Location = new System.Drawing.Point(120, 136);
-            this.listView1_DB.Name = "listView1_DB";
-            this.listView1_DB.Size = new System.Drawing.Size(746, 426);
-            this.listView1_DB.TabIndex = 3;
-            this.listView1_DB.UseCompatibleStateImageBehavior = false;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("굴림", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label11.Location = new System.Drawing.Point(115, 51);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(753, 40);
-            this.label11.TabIndex = 12;
-            this.label11.Text = "온습도 DB 기록 (History + Real Time) ";
-            this.label11.Click += new System.EventHandler(this.label11_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -556,12 +557,12 @@ namespace UART_STM32_DHT11_INTERFACE
             this.gb_Comport.PerformLayout();
             this.tp_Monitoring.ResumeLayout(false);
             this.tp_Monitoring.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1_warning)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tp_History.ResumeLayout(false);
             this.tp_History.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1_warning)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

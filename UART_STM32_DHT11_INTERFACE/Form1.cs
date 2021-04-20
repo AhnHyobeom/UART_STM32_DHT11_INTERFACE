@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports; // Add for UART communication
-using System.Data.SqlClient; // Add for MySQL
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient; 
+using MySql.Data.MySqlClient; // Add for MySQL
 
 namespace UART_STM32_DHT11_INTERFACE
 {
@@ -256,7 +256,7 @@ namespace UART_STM32_DHT11_INTERFACE
         {
 
         }
-
+        // Clear 버튼 클릭시
         private void button1_Clear_Click(object sender, EventArgs e)
         {
             textBox1_ReceiveData.Text = "";

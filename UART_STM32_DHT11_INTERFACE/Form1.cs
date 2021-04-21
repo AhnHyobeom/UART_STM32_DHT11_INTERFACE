@@ -16,10 +16,10 @@ namespace UART_STM32_DHT11_INTERFACE
     public partial class Form1 : Form
     {
         String connStr = "Server=127.0.0.1;Uid=root;Pwd=1234;Database=sensor_db;Charset=UTF8";
-        MySqlConnection conn; // 교량
-        MySqlCommand cmd; // 트럭
-        String sql = "";  // 물건박스
-        MySqlDataReader reader; // 트럭이 가져올 끈
+        MySqlConnection conn;
+        MySqlCommand cmd;
+        String sql = "";
+        MySqlDataReader reader;
         string datain = ""; // UART로 부터 들어온 data를 읽어 들이는 변수
         string[] inputSensorData; // UART로 부터 들어온 data Parsing Array
         const int MAX_TMP = 30;
@@ -103,8 +103,6 @@ namespace UART_STM32_DHT11_INTERFACE
         }
         private void showData(object sender, EventArgs e)
         {
-            // [Tmp]22 ->   [Tmp]    28 
-            // [Wet]28
             string s_date = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
             sql = "INSERT INTO sensor(s_date, s_temper, s_humi) VALUES ('";
             if (datain.Contains("[Tmp]") == true)
@@ -142,7 +140,7 @@ namespace UART_STM32_DHT11_INTERFACE
         }
         private void button2_ClosePort_Click(object sender, EventArgs e)
         {
-            serialPort1.Close(); // 예외 처리 집어 넣을것
+            serialPort1.Close();
             progressBar1_PortStatus.Value = 0;
             label1_Comport.Text = "OFF";
             label1_Comport.ForeColor = Color.Red;
@@ -207,7 +205,6 @@ namespace UART_STM32_DHT11_INTERFACE
             sql = "SELECT s_date, s_temper, s_humi FROM sensor ORDER BY s_date";
             cmd.CommandText = sql;
             reader = cmd.ExecuteReader();
-            reader.Read();
             ListViewItem item;
             int temper = 0;
             int humi = 0;
@@ -321,11 +318,12 @@ namespace UART_STM32_DHT11_INTERFACE
             nowDate = DateTime.Now;
             label13_SearchName.Text = nowDate + " 습도 검색 " + lowWET + " 이상 " + highWET + " 이하";
         }
+        // search ListView 초기화
         private void searchListViewInit()
         {
             cmd.CommandText = sql;
             reader = cmd.ExecuteReader();
-            // Seach ListView 상단 설정
+            // Search ListView 상단 설정
             listView1_Search.Clear();
             listView1_Search.View = View.Details;
             listView1_Search.Columns.Add("시간");

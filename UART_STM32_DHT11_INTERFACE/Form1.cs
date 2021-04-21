@@ -28,6 +28,7 @@ namespace UART_STM32_DHT11_INTERFACE
         const int MIN_WET = 15;
         int[] temperAry = new int[30]; // for TMP draw chart
         int[] humiAry = new int[30]; // for WET draw chart
+        DateTime[] dateAry = new DateTime[30];
         string s_temper = ""; // DB INSERT 변수
         string s_humi = ""; // DB INSERT 변수
         public Form1()
@@ -102,7 +103,6 @@ namespace UART_STM32_DHT11_INTERFACE
         }
         private void showData(object sender, EventArgs e)
         {
-            textBox1_ReceiveData.Text += datain;
             // [Tmp]22 ->   [Tmp]    28 
             // [Wet]28
             string s_date = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
@@ -121,6 +121,15 @@ namespace UART_STM32_DHT11_INTERFACE
             }
             if (s_temper != "" && s_humi != "") 
             {
+                try
+                {
+                    int.Parse(s_temper);
+                    int.Parse(s_humi);
+                }
+                catch (FormatException)
+                {
+                    return;
+                }
                 sql += s_date + "', " + s_temper + ", " + s_humi + ")";
                 cmd.CommandText = sql;
                 cmd.ExecuteNonQuery();
@@ -129,6 +138,7 @@ namespace UART_STM32_DHT11_INTERFACE
                 s_temper = "";
                 s_humi = "";
             }
+            textBox1_ReceiveData.Text += datain;
         }
         private void button2_ClosePort_Click(object sender, EventArgs e)
         {
@@ -156,20 +166,24 @@ namespace UART_STM32_DHT11_INTERFACE
         // 차트 그리기
         private void drawChart()
         {
-            sql = "SELECT s_temper, s_humi FROM sensor ORDER BY s_date DESC LIMIT 1";
+            sql = "SELECT s_date, s_temper, s_humi FROM sensor ORDER BY s_date DESC LIMIT 1";
             cmd.CommandText = sql;
             reader = cmd.ExecuteReader();
             reader.Read();
+            DateTime date = new DateTime();
+            date = (DateTime)reader["s_date"];
             int temper = (int)reader["s_temper"];
             int humi = (int)reader["s_humi"];
             reader.Close();
             //한칸씩 당기기
             for (int i = 0; i < temperAry.Length - 1; i++)
             {
+                dateAry[i] = dateAry[i + 1];
                 temperAry[i] = temperAry[i + 1];
                 humiAry[i] = humiAry[i + 1];
             }
             //최신 데이터를 마지막에 넣기
+            dateAry[dateAry.Length - 1] = date;
             temperAry[temperAry.Length - 1] = temper;
             humiAry[humiAry.Length - 1] = humi;
             //차트 그리기
@@ -179,11 +193,12 @@ namespace UART_STM32_DHT11_INTERFACE
             chart1.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             chart1.Series[0].Points.Clear();
             chart1.Series[1].Points.Clear();
-
+            int index = 0;
+            chart1.ChartAreas["ChartArea1"].AxisX.LabelStyle.Interval = 2;
             for (int i = 0; i < temperAry.Length; i++)
             {
-                chart1.Series[0].Points.AddXY(i, temperAry[i]);
-                chart1.Series[1].Points.AddXY(i, humiAry[i]);
+                chart1.Series[0].Points.AddXY(dateAry[i] + " " + index, temperAry[i]);
+                chart1.Series[1].Points.AddXY(dateAry[i] + " " + index++, humiAry[i]);
             }
         }
         // 초기화 ListView

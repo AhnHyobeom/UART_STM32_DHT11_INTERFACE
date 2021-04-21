@@ -26,9 +26,9 @@ namespace UART_STM32_DHT11_INTERFACE
         const int MIN_TMP = 15;
         const int MAX_WET = 40;
         const int MIN_WET = 15;
+        DateTime[] dateAry = new DateTime[30]; // for TMP draw chart
         int[] temperAry = new int[30]; // for TMP draw chart
         int[] humiAry = new int[30]; // for WET draw chart
-        DateTime[] dateAry = new DateTime[30];
         string s_temper = ""; // DB INSERT 변수
         string s_humi = ""; // DB INSERT 변수
         public Form1()
@@ -281,7 +281,6 @@ namespace UART_STM32_DHT11_INTERFACE
         {
 
         }
-
         private void Form1_Resize(object sender, EventArgs e)
         {
 

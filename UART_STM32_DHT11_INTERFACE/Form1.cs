@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.IO.Ports; // Add for UART communication
 using System.Data.SqlClient; 
 using MySql.Data.MySqlClient; // Add for MySQL
+using Flee.CalcEngine.PublicTypes;
+using Flee.PublicTypes;
 
 namespace UART_STM32_DHT11_INTERFACE
 {
@@ -50,6 +52,8 @@ namespace UART_STM32_DHT11_INTERFACE
             textBox2_MINTMP.Text = MIN_TMP.ToString();
             textBox4_MAXWET.Text = MAX_WET.ToString();
             textBox3_MINWET.Text = MIN_WET.ToString();
+            tb_mainDisplay.Text = mainDisplay;
+            tb_calculTop.Text = "0";
         }
         private void label4_Click(object sender, EventArgs e)
         {
@@ -80,6 +84,8 @@ namespace UART_STM32_DHT11_INTERFACE
                     progressBar1_PortStatus.Value = 100;
                     label1_Comport.Text = "ON";
                     label1_Comport.ForeColor = Color.Green;
+                    label4_DBStatus.Text = "OPEN";
+                    label4_DBStatus.ForeColor = Color.Green;
 
                     button1_Send.Enabled = true;
                     button1_Clear.Enabled = true;
@@ -144,6 +150,8 @@ namespace UART_STM32_DHT11_INTERFACE
             progressBar1_PortStatus.Value = 0;
             label1_Comport.Text = "OFF";
             label1_Comport.ForeColor = Color.Red;
+            label4_DBStatus.Text = "Close";
+            label4_DBStatus.ForeColor = Color.Red;
 
             pictureBox1_warning.Visible = false;
 
@@ -400,7 +408,7 @@ namespace UART_STM32_DHT11_INTERFACE
         private void tap_Selected(object sender, TabControlEventArgs e)
         {
             // exit탭 클릭시
-            if (e.TabPageIndex == 4)
+            if (e.TabPage.Text == "Exit")
             {
                 serialPort1.Close();
                 this.Close();
@@ -410,6 +418,347 @@ namespace UART_STM32_DHT11_INTERFACE
         private void tap_SelectedIndexChanged(object sender, EventArgs e)
         {
             
+        }
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (checkBox1_sw1.Checked)
+                {
+                    progressBar1_led1.Value = 100;
+                    serialPort1.WriteLine("led1on" + Environment.NewLine);
+                    textBox1_SendData.Text = "led1on" + Environment.NewLine;
+                }
+                else
+                {
+                    progressBar1_led1.Value = 0;
+                    serialPort1.WriteLine("led1off" + Environment.NewLine);
+                    textBox1_SendData.Text = "led1off" + Environment.NewLine;
+                }
+            } 
+            catch(InvalidOperationException)
+            {
+                progressBar1_led1.Value = 0;
+                MessageBox.Show("Port를 먼저 연결하시오 !!");
+            }
+        }
+        private void checkBox2_sw2_CheckedChanged(object sender, EventArgs e)
+        {
+            try 
+            {
+                if (checkBox2_sw2.Checked)
+                {
+                    progressBar2_led2.Value = 100;
+                    serialPort1.WriteLine("led2on" + Environment.NewLine);
+                    textBox1_SendData.Text = "led2on" + Environment.NewLine;
+                }
+                else
+                {
+                    progressBar2_led2.Value = 0;
+                    serialPort1.WriteLine("led2off" + Environment.NewLine);
+                    textBox1_SendData.Text = "led2off" + Environment.NewLine;
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                progressBar2_led2.Value = 0;
+                MessageBox.Show("Port를 먼저 연결하시오 !!");
+            }
+        }
+        private void checkBox3_sw3_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (checkBox3_sw3.Checked)
+                {
+                    progressBar3_led3.Value = 100;
+                    serialPort1.WriteLine("led3on" + Environment.NewLine);
+                    textBox1_SendData.Text = "led3on" + Environment.NewLine;
+                }
+                else
+                {
+                    progressBar3_led3.Value = 0;
+                    serialPort1.WriteLine("led3off" + Environment.NewLine);
+                    textBox1_SendData.Text = "led3off" + Environment.NewLine;
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                progressBar3_led3.Value = 0;
+                MessageBox.Show("Port를 먼저 연결하시오 !!");
+            }
+        }
+        private void checkBox1_swFan1_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (checkBox1_swFan1.Checked)
+                {
+                    progressBar1_fan1.Value = 100;
+                    serialPort1.WriteLine("fanon" + Environment.NewLine);
+                    textBox1_SendData.Text = "fanon" + Environment.NewLine;
+                }
+                else
+                {
+                    progressBar1_fan1.Value = 0;
+                    serialPort1.WriteLine("fanoff" + Environment.NewLine);
+                    textBox1_SendData.Text = "fanoff" + Environment.NewLine;
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                progressBar1_fan1.Value = 0;
+                MessageBox.Show("Port를 먼저 연결하시오 !!");
+            }
+        }
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+        // calculator
+        string mainDisplay = "0";
+        string calculTop = "";
+        int bracketCount = 0;
+        // 숫자 부분
+        private void addCalculTop(string input)
+        {
+            calculTop += input;
+            tb_calculTop.Text = calculTop;
+        }
+        private void addMainDisplay(string input)
+        {
+            if(bracketCount > 0)
+            {
+                return;
+            }
+            mainDisplay += input;
+            tb_mainDisplay.Text = mainDisplay;
+            // 진법 변환 추가
+            tryCalcul();
+        }
+        private void btn_0_Click(object sender, EventArgs e)
+        {
+            addCalculTop("0");
+            if (mainDisplay == "0")
+            {
+                return;
+            }
+            addMainDisplay("0");
+        }
+
+        private void btn_1_Click(object sender, EventArgs e)
+        {
+            addCalculTop("1");
+            if (mainDisplay == "0")
+            {
+                mainDisplay = "";
+            }
+            addMainDisplay("1");
+        }
+
+        private void btn_2_Click(object sender, EventArgs e)
+        {
+            addCalculTop("2");
+            if (mainDisplay == "0")
+            {
+                mainDisplay = "";
+            }
+            addMainDisplay("2");
+        }
+
+        private void btn_3_Click(object sender, EventArgs e)
+        {
+            addCalculTop("3");
+            if (mainDisplay == "0")
+            {
+                mainDisplay = "";
+            }
+            addMainDisplay("3");
+        }
+
+        private void btn_4_Click(object sender, EventArgs e)
+        {
+            addCalculTop("4");
+            if (mainDisplay == "0")
+            {
+                mainDisplay = "";
+            }
+            addMainDisplay("4");
+        }
+
+        private void btn_5_Click(object sender, EventArgs e)
+        {
+            addCalculTop("5");
+            if (mainDisplay == "0")
+            {
+                mainDisplay = "";
+            }
+            addMainDisplay("5");
+        }
+
+        private void btn_6_Click(object sender, EventArgs e)
+        {
+            addCalculTop("6");
+            if (mainDisplay == "0")
+            {
+                mainDisplay = "";
+            }
+            addMainDisplay("6");
+        }
+
+        private void btn_7_Click(object sender, EventArgs e)
+        {
+            addCalculTop("7");
+            if (mainDisplay == "0")
+            {
+                mainDisplay = "";
+            }
+            addMainDisplay("7");
+        }
+
+        private void btn_8_Click(object sender, EventArgs e)
+        {
+            addCalculTop("8");
+            if (mainDisplay == "0")
+            {
+                mainDisplay = "";
+            }
+            addMainDisplay("8");
+        }
+
+        private void btn_9_Click(object sender, EventArgs e)
+        {
+            addCalculTop("9");
+            if (mainDisplay == "0")
+            {
+                mainDisplay = "";
+            }
+            addMainDisplay("9");
+        }
+        // 연산자 부분
+        private void btn_plus_subtract_Click(object sender, EventArgs e)
+        {
+            // addCalculTop("-");
+        }
+
+        private void btn_point_Click(object sender, EventArgs e)
+        {
+            addCalculTop(".");
+        }
+
+        private void btn_CE_Click(object sender, EventArgs e)
+        {
+            calculTop = "";
+            tb_calculTop.Text = calculTop;
+            mainDisplay = "0";
+            tb_mainDisplay.Text = mainDisplay;
+        }
+
+        private void btn_plus_Click(object sender, EventArgs e)
+        {
+            addCalculTop("+");
+        }
+
+        private void btn_subtract_Click(object sender, EventArgs e)
+        {
+            addCalculTop("-");
+        }
+
+        private void btn_mul_Click(object sender, EventArgs e)
+        {
+            addCalculTop("*");
+        }
+
+        private void btn_div_Click(object sender, EventArgs e)
+        {
+            calculTop += "/";
+            // flee 에서 나눗셈은 double 형태인 소수로 입력해야 소수 형태로 return한다
+            string temp = "";
+            string[] calculTopAry = calculTop.Split(new char[] { '+', '-', '*', '/', '%', '(', ')' });
+            List<String> li = calculTopAry.ToList();
+            li.RemoveAll(d => d.Length == 0);
+            int i = 0;
+            // 마지막 숫자가 double형이 아니라면
+            if (!li[li.Count - 1].Contains("."))
+            { // .0 붙여주기
+                for (i = calculTop.Length - 2; i >= 0; i--)
+                {
+                    if (calculTop[i] >= '0' && calculTop[i] <= '9')
+                    {
+                        temp = calculTop.Substring(0, i) + calculTop[i] + ".0";
+                        break;
+                    }
+                }
+                for (int j = i + 1; j < calculTop.Length; j++)
+                {
+                    temp += calculTop[j];
+                }
+                calculTop = temp;
+            }
+            tb_calculTop.Text = calculTop;
+        }
+
+        private void btn_moduler_Click(object sender, EventArgs e)
+        {
+            addCalculTop("%");
+        }
+        private void btn_equals_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ExpressionContext context = new ExpressionContext();
+                IDynamicExpression ide = context.CompileDynamic(calculTop);
+                var res = ide.Evaluate();
+                tb_mainDisplay.Text = res.ToString();
+            }
+            catch (ExpressionCompileException ex)
+            {
+                // Handle expression compile error
+                if (ex.Reason == CompileExceptionReason.SyntaxError)
+                {
+                    MessageBox.Show("Check your expression syntax");
+                }
+            }
+        }
+
+        private void btn_openBracket_Click(object sender, EventArgs e)
+        {
+            bracketCount++;
+            mainDisplay = "";
+            tb_mainDisplay.Text = mainDisplay;
+            addCalculTop("(");
+        }
+
+        private void btn_closeBracket_Click(object sender, EventArgs e)
+        {
+            bracketCount--;
+            addCalculTop(")");
+            tryCalcul();
+        }
+
+        private void btn_del_Click(object sender, EventArgs e)
+        {
+            calculTop = calculTop.Substring(0, calculTop.Length - 1);
+            tb_calculTop.Text = calculTop;
+            tryCalcul();
+        }
+        private void tryCalcul()
+        {
+            if (bracketCount == 0)
+            {
+                try
+                {
+                    ExpressionContext context = new ExpressionContext();
+                    IDynamicExpression ide = context.CompileDynamic(calculTop);
+                    var res = ide.Evaluate();
+                    tb_mainDisplay.Text = res.ToString();
+                    // 진법 변환 추가
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+            }
         }
     }
 }
